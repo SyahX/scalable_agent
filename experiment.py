@@ -146,7 +146,16 @@ class Agent(snt.RNNCore):
 
     # Convert to floats.
     frame = tf.to_float(frame)
+    
+    # Shallow Model
+    frame /= 255
+    with tf.variable_scope('convnet'):
+      conv_out = frame
+      conv_out = snt.Conv2D(16, 8, stride=4, padding='SAME')(conv_out)
+      conv_out = snt.Conv2D(32, 4, stride=2, padding='SAME')(conv_out)
 
+    # Deep Model
+    """
     frame /= 255
     with tf.variable_scope('convnet'):
       conv_out = frame
@@ -169,6 +178,7 @@ class Agent(snt.RNNCore):
             conv_out = tf.nn.relu(conv_out)
             conv_out = snt.Conv2D(num_ch, 3, stride=1, padding='SAME')(conv_out)
             conv_out += block_input
+    """
 
     conv_out = tf.nn.relu(conv_out)
     conv_out = snt.BatchFlatten()(conv_out)
