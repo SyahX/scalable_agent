@@ -179,6 +179,12 @@ class PyProcessTest(tf.test.TestCase):
           with tf.gfile.Open(self._filename, 'w') as f:
             f.write('was_closed')
 
+        @staticmethod
+        def _tensor_specs(method_name, unused_kwargs,
+                          unused_constructor_kwargs):
+          if method_name == 'something':
+            return ()
+
       with tf.Graph().as_default():
         py_process.PyProcess(Example, tmp.name)
 
